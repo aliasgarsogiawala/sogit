@@ -1,9 +1,10 @@
 import argparse
+import sys
 def main():
     parser = argparse.ArgumentParser(
         description="Sogit - A simple git clone tool"
     )
-    subparsers= argparse.add_subparsers(
+    subparsers= parser.add_subparsers(
         dest="command",
         help="Available commands"
     )
@@ -13,4 +14,15 @@ def main():
         "init",
         help="Initialize a new repository"
     )
+    args = parser.parse_args()
+
+    if not args.command:
+        parser.print_help()
+        return
+    try:
+        pass
+    except Exception as e:
+        print(f"Error: {e}")
+        sys.exit(1)
+
 main()
