@@ -11,14 +11,15 @@ class Repository:
         self.objects_dir= self.git_dir / "objects"
         # .git/refs
         self.ref_dir= self.git_dir / "refs"
-        self.heads_dir= self.ref_dir / "refs"
+        self.heads_dir= self.ref_dir / "heads"
         #HEAD FIle
         self.head_file= self.git_dir/"HEAD"
 
         #.git/index
         self.index_file= self.git_dir / "index"
     def init(self) -> bool:
-
+        if self.git_dir.exists():
+            return False
         #create directories
         self.git_dir.mkdir()
         self.objects_dir.mkdir()
@@ -28,7 +29,9 @@ class Repository:
         self.heads_dir.mkdir()
         self.head_file.write_text("ref: refs/heads/main\n")
         self.index_file.write_text(json.dumps({},indent=2))
-        print(f"Initialised empty repository in {self.path}")
+        print(f"Initialised empty repository in {self.git_dir}")
+
+        return True
 
 
 
@@ -57,7 +60,10 @@ def main():
         return
     try:
         if args.command == "init":
-            pass
+            repo = Repository()
+            if not repo.init():
+                print(f"Repository already exists in {repo.git_dir}")
+                return 
     except Exception as e:
         print(f"Error: {e}")
         sys.exit(1)
